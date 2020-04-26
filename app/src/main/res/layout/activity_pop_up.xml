@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="500dp"
+    android:background="@drawable/custom_background_pop_up_view">
+
+
+    <Button
+        android:id="@+id/btClose"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="CLOSE"
+        android:background="@android:color/transparent"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:textColor="#fff"
+        android:fontFamily="@font/math_tapping"
+        />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/btClose"
+        >
+        <TextView
+            android:id="@+id/textResult"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textColor="#fff"
+            android:textSize="17sp"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:fontFamily="@font/chalkboard"
+            android:text="\n
+_1_\n
+Definition: arbrbavas rtgsrt rstts\n
+Syn:\n
+    +agaeg\n
+    +aebaf\n
+Ex:\n
+    +aiiaev aerae ae arv\n
+    +aiiaev aerae ae arv\n
+    +aiiaev aerae ae arv\n
+    +aiiaev aerae ae arv\n
+\n
+_2_\n
+Definition: arbrbavas rtgsrt rstts\n
+Syn:\n
+    +agaeg\n
+    +aebaf\n
+Ex:\n
+    +aiiaev aerae ae arv\n
+    +aiiaev aerae ae arv\n
+    +aiiaev aerae ae arv\n
+    +aiiaev aerae ae arv\n
+"
+            />
+
+
+    </ScrollView>
+</RelativeLayout>

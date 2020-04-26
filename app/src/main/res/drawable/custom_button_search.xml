@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:state_pressed="true">
+        <layer-list xmlns:android="http://schemas.android.com/apk/res/android" >
+            <item >
+                <shape>
+                    <solid android:color="@android:color/transparent"/>
+                    <corners android:radius="2dp"/>
+                </shape>
+            </item>
+            <item android:top="2dp">
+                <shape>
+                    <solid android:color="#A96400"/>
+                    <corners android:radius="2dp"/>
+                </shape>
+
+            </item>
+            <item android:top="2dp"
+                android:bottom="3dp">
+                <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+                    <item>
+                        <shape>
+                            <padding android:left="35dp"
+                                android:right="35dp"
+                                android:top="12dp"
+                                android:bottom="12dp"/>
+                            <solid android:color="#FFB447"/>
+                            <corners android:radius="2dp"/>
+                        </shape>
+                    </item>
+                    <item>
+                        <bitmap android:src="@drawable/check_text"/>
+                    </item>
+                </layer-list>
+            </item>
+
+        </layer-list>
+    </item>
+
+    <item
+        android:state_pressed="false">
+        <layer-list xmlns:android="http://schemas.android.com/apk/res/android" >
+            <item>
+                <shape>
+                    <solid android:color="#A96400"/>
+                    <corners android:radius="2dp"/>
+                </shape>
+            </item>
+            <item android:bottom="5dp">
+                <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+                    <item>
+                        <shape>
+                            <padding android:left="35dp"
+                                android:right="35dp"
+                                android:top="12dp"
+                                android:bottom="12dp"/>
+                            <solid android:color="#FFB447"/>
+                            <corners android:radius="2dp"/>
+                        </shape>
+                    </item>
+                    <item>
+                        <bitmap android:src="@drawable/check_text" />
+                    </item>
+                </layer-list>
+            </item>
+
+        </layer-list>
+    </item>
+</selector>
