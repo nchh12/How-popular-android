@@ -31,8 +31,8 @@ import org.json.JSONObject;
 import java.io.IOException;
 
 public class ResultActivity extends Activity {
-    Button btBack, btCloseDialog;
-    TextView labelWord, labelResult, labelTmp, labelDetail;
+    Button btBack, btCloseDialog, labelWord;
+    TextView  labelResult, labelTmp, labelDetail;
     View slidingView, background;
     Point screenSize = new Point();
     int markHeight, curHeight, delta = 12, targetColor;
@@ -257,6 +257,12 @@ public class ResultActivity extends Activity {
             @Override
             public void onClick(View v) {
                 popUpView.cancel();
+            }
+        });
+        labelWord.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                popUpView.show();
             }
         });
     }
