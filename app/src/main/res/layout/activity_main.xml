@@ -28,8 +28,8 @@
         android:background="@drawable/custom_searchbar"
         android:hint="Type a word..."
         android:inputType="textPersonName"
-        android:textSize="20dp"
-        android:maxEms="25"
+        android:textSize="17dp"
+        android:maxLength="25"
         android:padding="10dp" />
 
     <Button

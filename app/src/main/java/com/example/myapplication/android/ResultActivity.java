@@ -79,7 +79,8 @@ public class ResultActivity extends Activity {
                                 changeUI(finalVal /MAX_RATE);
                             }
                         });
-
+                        if (!json.has("results") || json.isNull("results"))
+                            return;
                         JSONArray detailsArray = json.getJSONArray("results");
                         for(int index = 0; index < detailsArray.length(); index++){
                             JSONObject detail = detailsArray.getJSONObject(index);
