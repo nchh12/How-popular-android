@@ -4,45 +4,46 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#2f2f2f"
+    android:background="#FFAC65"
     tools:context=".MainActivity">
     <pl.droidsonroids.gif.GifTextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="420dp"
+        android:layout_height="594dp"
+        android:layout_marginTop="40dp"
         android:background="@drawable/bg"
-        />
-    <TextView
-        android:id="@+id/mark"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
-        android:text=""  />
+        />
 
     <EditText
         android:id="@+id/editText"
-        android:layout_width="200dp"
-        android:layout_height="70dp"
+        android:layout_width="150dp"
+        android:layout_height="60dp"
         android:layout_centerHorizontal="true"
-        android:layout_above="@+id/mark"
+        android:layout_above="@+id/button"
+        android:layout_marginBottom="5dp"
         android:background="@drawable/custom_searchbar"
-        android:hint="Type a word..."
+        android:hint="a word..."
         android:inputType="textPersonName"
         android:textSize="17dp"
         android:maxLength="25"
         android:padding="10dp" />
-
     <Button
         android:id="@+id/button"
-        android:layout_width="200dp"
-        android:layout_height="70dp"
-        android:layout_below="@+id/editText"
+        android:layout_width="150dp"
+        android:layout_height="55dp"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="25dp"
+        android:layout_centerVertical="true"
         android:background="@drawable/custom_button_search"
-        android:gravity="left|center_vertical"
-        android:inputType="text"
         android:maxLength="25" />
 
-
+    <ListView
+        android:id="@+id/listView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentBottom="true"
+        android:layout_below="@+id/button"
+        android:layout_marginTop="50dp"
+        android:smoothScrollbar="true"
+        android:divider="#FFAC65"
+        />
 </RelativeLayout>

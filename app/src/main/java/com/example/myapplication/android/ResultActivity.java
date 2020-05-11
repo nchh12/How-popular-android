@@ -35,6 +35,7 @@ public class ResultActivity extends Activity {
     TextView  labelResult, labelTmp, labelDetail;
     View slidingView, background;
     Point screenSize = new Point();
+    String word;
     int markHeight, curHeight, delta = 12, targetColor;
     int tick = 30; //ms
     int [] backgroundColors;
@@ -151,7 +152,6 @@ public class ResultActivity extends Activity {
             else{
                 labelWord.setTextColor(targetColor);
                 labelResult.setText((Math.round((1.0-(double)markHeight/screenSize.y)*100))+"%");
-                showPopUpView();
             }
         }
     };
@@ -165,6 +165,10 @@ public class ResultActivity extends Activity {
         }
     }
     void changeUI(double percent){
+        //add to history
+        SearchedWords searchedWords = SearchedWords.getSharedValue(this);
+        searchedWords.appendAndSave(word, (int)(percent*100), this);
+        //
         if (percent >= 0.8) {
             targetColor = backgroundColors[5];
         }else if (percent >= 0.7){
@@ -244,7 +248,7 @@ public class ResultActivity extends Activity {
         background.setBackgroundColor(backgroundColors[0]);
 
         //get word
-        String word = getIntent().getStringExtra("word");
+        word = getIntent().getStringExtra("word");
         labelWord.setText(word);
         btBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -263,7 +267,7 @@ public class ResultActivity extends Activity {
         labelWord.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                popUpView.show();
+                showPopUpView();
             }
         });
     }

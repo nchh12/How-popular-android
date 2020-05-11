@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="120dp"
+    android:orientation="horizontal"
+    android:background="#FFAC65"
+    android:paddingRight="15dp"
+    android:paddingLeft="15dp"
+    android:paddingBottom="10dp"
+    >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/custom_background_result"
+        android:padding="20dp"
+        >
+        <TextView
+            android:id="@+id/wordString"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#fff"
+            android:textSize="30sp"
+            android:layout_centerVertical="true"
+            android:fontFamily="@font/math_tapping"
+            android:text="test" />
+
+        <TextView
+            android:id="@+id/wordPoint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#fff"
+            android:textSize="25sp"
+            android:fontFamily="@font/math_tapping"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:text="TextView" />
+
+    </RelativeLayout>
+
+
+</RelativeLayout>

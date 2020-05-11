@@ -33,29 +33,7 @@
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
             android:fontFamily="@font/chalkboard"
-            android:text="\n
-_1_\n
-Definition: arbrbavas rtgsrt rstts\n
-Syn:\n
-    +agaeg\n
-    +aebaf\n
-Ex:\n
-    +aiiaev aerae ae arv\n
-    +aiiaev aerae ae arv\n
-    +aiiaev aerae ae arv\n
-    +aiiaev aerae ae arv\n
-\n
-_2_\n
-Definition: arbrbavas rtgsrt rstts\n
-Syn:\n
-    +agaeg\n
-    +aebaf\n
-Ex:\n
-    +aiiaev aerae ae arv\n
-    +aiiaev aerae ae arv\n
-    +aiiaev aerae ae arv\n
-    +aiiaev aerae ae arv\n
-"
+            android:text=""
             />
 
 
