@@ -17,6 +17,7 @@ public class MainActivity extends Activity {
     Button bt;
     EditText editText;
     ListView listSearchedWords;
+    AdapterListView customAdapter;
     Boolean check(String s){
         if (s.equals("")) return false;
         if (s.length() > 25){
@@ -33,7 +34,7 @@ public class MainActivity extends Activity {
     void setUpListView(){
         int []backgroundColors = getResources().getIntArray(R.array.backgroundColors);
         SearchedWords searchedWords = SearchedWords.getSharedValue(this);
-        AdapterListView customAdapter = new AdapterListView(this,
+        customAdapter = new AdapterListView(this,
                 searchedWords.arrayWordString,
                 searchedWords.arrayWordPoint,
                 backgroundColors);
@@ -74,6 +75,7 @@ public class MainActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
+        customAdapter.notifyDataSetChanged();
 //        SearchedWords tmp = SearchedWords.getSharedValue(this);
 //        for(int i=0; i<tmp.arrayWordString.size(); i++){
 //            Log.d("@@@", tmp.arrayWordString.get(i)+" "+tmp.arrayWordPoint.get(i));

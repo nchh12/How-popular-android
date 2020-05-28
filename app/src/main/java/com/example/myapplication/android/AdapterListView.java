@@ -60,7 +60,7 @@ public class AdapterListView extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
-        Log.d("@@@",position+" "+convertView);
+//        Log.d("@@@",position+" "+convertView);
         ViewHolder viewHolder;
         if (convertView == null){
             convertView = layoutInflater.inflate(R.layout.activity_listview, null);

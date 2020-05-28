@@ -20,6 +20,12 @@ import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.InterstitialAd;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.initialization.InitializationStatus;
+import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import com.squareup.okhttp.Callback;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
@@ -43,6 +49,7 @@ public class ResultActivity extends Activity {
     Dialog popUpView;
     String resultString = "";
     RelativeLayout.LayoutParams paramOfView;
+    private InterstitialAd mInterstitialAd;
     void getData(String word){
         OkHttpClient client = new OkHttpClient();
         String url = "https://wordsapiv1.p.rapidapi.com/words/"+word;
@@ -80,21 +87,34 @@ public class ResultActivity extends Activity {
                                 changeUI(finalVal /MAX_RATE);
                             }
                         });
+                        //get pronunciation
+                        if (json.has("pronunciation") && !json.isNull("pronunciation")){
+                            try {
+                                JSONObject pronunciationJson = json.getJSONObject("pronunciation");
+                                if (pronunciationJson.has("all") && !pronunciationJson.isNull("all")) { 
+                                    resultString="\\"+pronunciationJson.getString("all")+"\\"+"\n";
+                                }
+                            }catch (JSONException e){
+                                resultString="\\"+json.getString("pronunciation")+"\\"+"\n";
+                            }
+
+                        }
+                        //get detail
                         if (!json.has("results") || json.isNull("results"))
                             return;
                         JSONArray detailsArray = json.getJSONArray("results");
                         for(int index = 0; index < detailsArray.length(); index++){
                             JSONObject detail = detailsArray.getJSONObject(index);
-                            resultString += "_"+ Integer.toString(index+1).toString() + "_\n";
+                            resultString += "_"+ Integer.toString(index+1) + "_\n";
                             //get definition & part of speech
                             String definition = detail.getString("definition");
                             String partOfSpeech = detail.getString("partOfSpeech");
                             resultString += "("+partOfSpeech+")\n";
-                            resultString += "Definition: " + definition + "\n";
+                            resultString += "- Definition: " + definition + "\n";
                             //get synonyms
                             if (detail.has("synonyms") && !detail.isNull("synonyms")){
                                 JSONArray synonyms = detail.getJSONArray("synonyms");
-                                resultString += "Syn:\n";
+                                resultString += "- Synonyms:\n";
                                 for(int i = 0; i < synonyms.length(); i++){
                                     String oneSynonym = synonyms.getString(i);
                                     resultString += "   = " + oneSynonym + "\n";
@@ -103,7 +123,7 @@ public class ResultActivity extends Activity {
                             //get examples
                             if (detail.has("examples") && !detail.isNull("examples")){
                                 JSONArray examples = detail.getJSONArray("examples");
-                                resultString += "Ex:\n";
+                                resultString += "- Ex:\n";
                                 for(int i = 0; i < examples.length(); i++){
                                     String oneExample = examples.getString(i);
                                     resultString += "   _ " + oneExample + "\n";
@@ -220,10 +240,29 @@ public class ResultActivity extends Activity {
         labelDetail.setText(resultString);
         popUpView.show();
     }
+    void setUpAdmob(){
+        MobileAds.initialize(this, new OnInitializationCompleteListener() {
+            @Override
+            public void onInitializationComplete(InitializationStatus initializationStatus) {}
+        });
+
+        mInterstitialAd = new InterstitialAd(this);
+        mInterstitialAd.setAdUnitId("@string/Ad_unit_ID");
+        mInterstitialAd.loadAd(new AdRequest.Builder().build());
+
+        mInterstitialAd.setAdListener(new AdListener() {
+            @Override
+            public void onAdClosed() {
+                // Load the next interstitial.
+                mInterstitialAd.loadAd(new AdRequest.Builder().build());
+            }
+        });
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_result);
+        setUpAdmob();
         //init UI
         btBack = findViewById(R.id.btBack);
         labelResult =  findViewById(R.id.labelResult);
@@ -253,10 +292,15 @@ public class ResultActivity extends Activity {
         btBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (mInterstitialAd.isLoaded()) {
+                    Log.d("@@@", "The interstitial loaded.");
+                    mInterstitialAd.show();
+                } else {
+                    Log.d("@@@", "The interstitial wasn't loaded yet.");
+                }
                 finish();
             }
         });
-
         getData(word);
         btCloseDialog.setOnClickListener(new View.OnClickListener() {
             @Override
