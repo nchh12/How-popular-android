@@ -18,7 +18,8 @@ public class AdapterListView extends BaseAdapter {
     List<Integer> arrayWordPoint;
     LayoutInflater layoutInflater;
     int[] backgroundColors;
-    AdapterListView(Context context, List<String> arrayWordString, List<Integer> arrayWordPoint, int[] backgroundColors){
+
+    AdapterListView(Context context, List<String> arrayWordString, List<Integer> arrayWordPoint, int[] backgroundColors) {
         this.context = context;
         this.arrayWordString = arrayWordString;
         this.arrayWordPoint = arrayWordPoint;
@@ -26,6 +27,7 @@ public class AdapterListView extends BaseAdapter {
         this.context = context;
         this.backgroundColors = backgroundColors;
     }
+
     @Override
     public int getCount() {
         return arrayWordString.size();
@@ -40,27 +42,29 @@ public class AdapterListView extends BaseAdapter {
     public long getItemId(int position) {
         return 0;
     }
-    int getColor(int percent){
+
+    int getColor(int percent) {
         if (percent >= 80) {
             return backgroundColors[5];
-        }else if (percent >= 70){
+        } else if (percent >= 70) {
             return backgroundColors[4];
-        }else if (percent >= 60){
+        } else if (percent >= 60) {
             return backgroundColors[3];
-        }else if (percent >= 50){
+        } else if (percent >= 50) {
             return backgroundColors[2];
-        }else if (percent >= 30){
+        } else if (percent >= 30) {
             return backgroundColors[1];
-        }else{
+        } else {
             return backgroundColors[0];
         }
     }
+
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
 //        Log.d("@@@",position+" "+convertView);
         ViewHolder viewHolder;
-        if (convertView == null){
+        if (convertView == null) {
             convertView = layoutInflater.inflate(R.layout.activity_listview, null);
             viewHolder = new ViewHolder();
             //define
@@ -70,18 +74,19 @@ public class AdapterListView extends BaseAdapter {
             viewHolder.wordString.setTypeface(typeface);
             viewHolder.wordPoint.setTypeface(typeface);
             convertView.setTag(viewHolder);
-        }else{
-            viewHolder = (ViewHolder)convertView.getTag();
+        } else {
+            viewHolder = (ViewHolder) convertView.getTag();
         }
-        viewHolder.wordString.setText(arrayWordString.get(arrayWordString.size()-1-position));
-        viewHolder.wordPoint.setText(arrayWordPoint.get(arrayWordString.size()-1-position)+"%");
+        viewHolder.wordString.setText(arrayWordString.get(arrayWordString.size() - 1 - position));
+        viewHolder.wordPoint.setText(arrayWordPoint.get(arrayWordString.size() - 1 - position) + "%");
         //color
-        int colorHash = getColor(arrayWordPoint.get(arrayWordString.size()-1-position));
+        int colorHash = getColor(arrayWordPoint.get(arrayWordString.size() - 1 - position));
         viewHolder.wordPoint.setTextColor(colorHash);
         viewHolder.wordString.setTextColor(colorHash);
         return convertView;
     }
-    static class ViewHolder{
+
+    static class ViewHolder {
         TextView wordString;
         TextView wordPoint;
     }

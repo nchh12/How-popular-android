@@ -32,27 +32,29 @@ import com.squareup.okhttp.Response;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import java.io.IOException;
 
 import static maes.tech.intentanim.CustomIntent.customType;
 
 public class ResultActivity extends Activity {
     Button btBack, btCloseDialog, labelWord;
-    TextView  labelResult, labelTmp, labelDetail;
+    TextView labelResult, labelTmp, labelDetail;
     View slidingView, background;
     Point screenSize = new Point();
     String word;
     int markHeight, curHeight, delta = 12, targetColor;
     int tick = 30; //ms
-    int [] backgroundColors;
+    int[] backgroundColors;
     final double MAX_RATE = 7;
     Dialog popUpView;
     String resultString = "";
     RelativeLayout.LayoutParams paramOfView;
     private InterstitialAd mInterstitialAd;
-    void getData(String word){
+
+    void getData(String word) {
         OkHttpClient client = new OkHttpClient();
-        String url = "https://wordsapiv1.p.rapidapi.com/words/"+word;
+        String url = "https://wordsapiv1.p.rapidapi.com/words/" + word;
         Request request = new Request.Builder()
                 .url(url)
                 .get()
@@ -73,29 +75,29 @@ public class ResultActivity extends Activity {
 
             @Override
             public void onResponse(Response response) throws IOException {
-                if (response.isSuccessful()){
+                if (response.isSuccessful()) {
                     try {
                         JSONObject json = new JSONObject(response.body().string());
 //                        Log.d("@@@", response+"");
                         double val = json.getDouble("frequency");
-                        Log.d("@@@", val+"");
+                        Log.d("@@@", val + "");
                         val = (val > MAX_RATE) ? MAX_RATE : val;
                         final double finalVal = val;
                         ResultActivity.this.runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                changeUI(finalVal /MAX_RATE);
+                                changeUI(finalVal / MAX_RATE);
                             }
                         });
                         //get pronunciation
-                        if (json.has("pronunciation") && !json.isNull("pronunciation")){
+                        if (json.has("pronunciation") && !json.isNull("pronunciation")) {
                             try {
                                 JSONObject pronunciationJson = json.getJSONObject("pronunciation");
-                                if (pronunciationJson.has("all") && !pronunciationJson.isNull("all")) { 
-                                    resultString="\\"+pronunciationJson.getString("all")+"\\"+"\n";
+                                if (pronunciationJson.has("all") && !pronunciationJson.isNull("all")) {
+                                    resultString = "\\" + pronunciationJson.getString("all") + "\\" + "\n";
                                 }
-                            }catch (JSONException e){
-                                resultString="\\"+json.getString("pronunciation")+"\\"+"\n";
+                            } catch (JSONException e) {
+                                resultString = "\\" + json.getString("pronunciation") + "\\" + "\n";
                             }
 
                         }
@@ -103,28 +105,28 @@ public class ResultActivity extends Activity {
                         if (!json.has("results") || json.isNull("results"))
                             return;
                         JSONArray detailsArray = json.getJSONArray("results");
-                        for(int index = 0; index < detailsArray.length(); index++){
+                        for (int index = 0; index < detailsArray.length(); index++) {
                             JSONObject detail = detailsArray.getJSONObject(index);
-                            resultString += "_"+ Integer.toString(index+1) + "_\n";
+                            resultString += "_" + Integer.toString(index + 1) + "_\n";
                             //get definition & part of speech
                             String definition = detail.getString("definition");
                             String partOfSpeech = detail.getString("partOfSpeech");
-                            resultString += "("+partOfSpeech+")\n";
+                            resultString += "(" + partOfSpeech + ")\n";
                             resultString += "- Definition: " + definition + "\n";
                             //get synonyms
-                            if (detail.has("synonyms") && !detail.isNull("synonyms")){
+                            if (detail.has("synonyms") && !detail.isNull("synonyms")) {
                                 JSONArray synonyms = detail.getJSONArray("synonyms");
                                 resultString += "- Synonyms:\n";
-                                for(int i = 0; i < synonyms.length(); i++){
+                                for (int i = 0; i < synonyms.length(); i++) {
                                     String oneSynonym = synonyms.getString(i);
                                     resultString += "   = " + oneSynonym + "\n";
                                 }
                             }
                             //get examples
-                            if (detail.has("examples") && !detail.isNull("examples")){
+                            if (detail.has("examples") && !detail.isNull("examples")) {
                                 JSONArray examples = detail.getJSONArray("examples");
                                 resultString += "- Ex:\n";
-                                for(int i = 0; i < examples.length(); i++){
+                                for (int i = 0; i < examples.length(); i++) {
                                     String oneExample = examples.getString(i);
                                     resultString += "   _ " + oneExample + "\n";
                                 }
@@ -142,7 +144,7 @@ public class ResultActivity extends Activity {
                             }
                         });
                     }
-                }else{
+                } else {
                     //not found
                     ResultActivity.this.runOnUiThread(new Runnable() {
                         @Override
@@ -154,56 +156,62 @@ public class ResultActivity extends Activity {
             }
         });
     }
+
     Handler handler = new Handler();
-    Runnable  update = new Runnable() {
+    Runnable update = new Runnable() {
         @Override
         public void run() {
             curHeight -= delta;
-            if (markHeight/screenSize.y < 0.45 && curHeight < screenSize.y*0.55){
+            if (markHeight / screenSize.y < 0.45 && curHeight < screenSize.y * 0.55) {
 
-            }else{
+            } else {
                 //update height of labelResult
-                labelResult.setY(curHeight-labelResult.getLineHeight());
+                labelResult.setY(curHeight - labelResult.getLineHeight());
             }
             paramOfView.height = curHeight;
-            labelResult.setText((Math.round((1.0-(double)curHeight/screenSize.y)*100))+"%");
+            labelResult.setText((Math.round((1.0 - (double) curHeight / screenSize.y) * 100)) + "%");
             slidingView.setLayoutParams(paramOfView);
             if (curHeight > markHeight) handler.postDelayed(update, tick);
-            else{
+            else {
                 labelWord.setTextColor(targetColor);
-                labelResult.setText((Math.round((1.0-(double)markHeight/screenSize.y)*100))+"%");
+                labelResult.setText((Math.round((1.0 - (double) markHeight / screenSize.y) * 100)) + "%");
             }
         }
     };
-    void errorCatching(int caseError){
-        switch (caseError){
-            case 3: labelTmp.setText("Not found :(");
+
+    void errorCatching(int caseError) {
+        switch (caseError) {
+            case 3:
+                labelTmp.setText("Not found :(");
                 break;
-            case 1: labelTmp.setText("Something wrong with internet :((");
+            case 1:
+                labelTmp.setText("Something wrong with internet :((");
                 break;
-            default: labelTmp.setText("Try later :(((");
+            default:
+                labelTmp.setText("Try later :(((");
         }
     }
-    void changeUI(double percent){
+
+    void changeUI(double percent) {
         //add to history
         SearchedWords searchedWords = SearchedWords.getSharedValue(this);
-        searchedWords.appendAndSave(word, (int)(percent*100), this);
+        searchedWords.appendAndSave(word, (int) (percent * 100), this);
         //
         if (percent >= 0.8) {
             targetColor = backgroundColors[5];
-        }else if (percent >= 0.7){
+        } else if (percent >= 0.7) {
             targetColor = backgroundColors[4];
-        }else if (percent >= 0.6){
+        } else if (percent >= 0.6) {
             targetColor = backgroundColors[3];
-        }else if (percent >= 0.5){
+        } else if (percent >= 0.5) {
             targetColor = backgroundColors[2];
-        }else if (percent >= 0.3){
+        } else if (percent >= 0.3) {
             targetColor = backgroundColors[1];
-        }else{
+        } else {
             targetColor = backgroundColors[0];
         }
         labelTmp.setText("");
-        markHeight = (int) (screenSize.y * (1-percent));
+        markHeight = (int) (screenSize.y * (1 - percent));
         curHeight = screenSize.y;
         handler.post(update);
         //change color animation
@@ -211,7 +219,7 @@ public class ResultActivity extends Activity {
                 new ArgbEvaluator(),
                 backgroundColors[0],
                 targetColor);
-        colorAnimation.setDuration(Math.round (((double)screenSize.y*percent)*((double)tick/delta))); // milliseconds
+        colorAnimation.setDuration(Math.round(((double) screenSize.y * percent) * ((double) tick / delta))); // milliseconds
         colorAnimation.setInterpolator(new AccelerateDecelerateInterpolator()); // increase the speed first and
         colorAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
 
@@ -224,7 +232,8 @@ public class ResultActivity extends Activity {
         colorAnimation.start();
 
     }
-    void setUpPopUpView(){
+
+    void setUpPopUpView() {
         popUpView = new Dialog(this);
         popUpView.requestWindowFeature(Window.FEATURE_NO_TITLE);
         popUpView.setCanceledOnTouchOutside(true);
@@ -236,14 +245,17 @@ public class ResultActivity extends Activity {
         btCloseDialog.setTypeface(typeface1);
         labelDetail.setTypeface(typeface2);
     }
-    void showPopUpView(){
+
+    void showPopUpView() {
         labelDetail.setText(resultString);
         popUpView.show();
     }
-    void setUpAdmob(){
+
+    void setUpAdmob() {
         MobileAds.initialize(this, new OnInitializationCompleteListener() {
             @Override
-            public void onInitializationComplete(InitializationStatus initializationStatus) {}
+            public void onInitializationComplete(InitializationStatus initializationStatus) {
+            }
         });
 
         mInterstitialAd = new InterstitialAd(this);
@@ -258,14 +270,15 @@ public class ResultActivity extends Activity {
             }
         });
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_result);
         //init UI
         btBack = findViewById(R.id.btBack);
-        labelResult =  findViewById(R.id.labelResult);
-        labelWord =  findViewById(R.id.labelWord);
+        labelResult = findViewById(R.id.labelResult);
+        labelWord = findViewById(R.id.labelWord);
         slidingView = findViewById(R.id.slidingView);
         labelTmp = findViewById(R.id.labelTmp);
         background = this.getWindow().getDecorView();
@@ -299,7 +312,7 @@ public class ResultActivity extends Activity {
                     Log.d("@@@", "The interstitial wasn't loaded yet.");
                 }
                 finish();
-                customType(ResultActivity.this,"right-to-left");
+                customType(ResultActivity.this, "right-to-left");
             }
         });
         getData(word);
