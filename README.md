@@ -1,5 +1,5 @@
 # How-popular-Android
-(the configuration file is hidden in this source code)
+(the configuration file is hidden in this source code) 
 
 ## Release
 - [Google Play Store](https://play.google.com/store/apps/details?id=com.lforestor.myapplication.android)
