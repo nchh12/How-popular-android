@@ -1,4 +1,4 @@
-package com.lforestor.myapplication.android;
+package com.lforestor.myapplication.android.view;
 
 import androidx.core.content.res.ResourcesCompat;
 
@@ -24,6 +24,8 @@ import com.google.android.gms.ads.InterstitialAd;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
+import com.lforestor.myapplication.android.R;
+import com.lforestor.myapplication.android.model.SearchedWords;
 import com.squareup.okhttp.Callback;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;

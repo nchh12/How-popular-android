@@ -1,4 +1,4 @@
-package com.lforestor.myapplication.android;
+package com.lforestor.myapplication.android.adapter;
 
 import android.content.Context;
 import android.graphics.Typeface;
@@ -10,6 +10,8 @@ import android.widget.TextView;
 
 import androidx.core.content.res.ResourcesCompat;
 
+import com.lforestor.myapplication.android.R;
+
 import java.util.List;
 
 public class AdapterListView extends BaseAdapter {
@@ -19,7 +21,7 @@ public class AdapterListView extends BaseAdapter {
     LayoutInflater layoutInflater;
     int[] backgroundColors;
 
-    AdapterListView(Context context, List<String> arrayWordString, List<Integer> arrayWordPoint, int[] backgroundColors) {
+    public AdapterListView(Context context, List<String> arrayWordString, List<Integer> arrayWordPoint, int[] backgroundColors) {
         this.context = context;
         this.arrayWordString = arrayWordString;
         this.arrayWordPoint = arrayWordPoint;

@@ -1,4 +1,4 @@
-package com.lforestor.myapplication.android;
+package com.lforestor.myapplication.android.view;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -8,9 +8,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import androidx.core.content.res.ResourcesCompat;
+
+import com.lforestor.myapplication.android.adapter.AdapterListView;
+import com.lforestor.myapplication.android.R;
+import com.lforestor.myapplication.android.model.SearchedWords;
 
 import static maes.tech.intentanim.CustomIntent.customType;
 

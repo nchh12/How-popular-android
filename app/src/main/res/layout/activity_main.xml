@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#FFAC65"
-    tools:context=".MainActivity">
+    tools:context=".view.MainActivity">
     <pl.droidsonroids.gif.GifTextView
         android:layout_width="420dp"
         android:layout_height="594dp"

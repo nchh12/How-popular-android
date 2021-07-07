@@ -1,4 +1,4 @@
-package com.lforestor.myapplication.android;
+package com.lforestor.myapplication.android.model;
 
 import android.app.Activity;
 import android.content.Context;
@@ -10,8 +10,8 @@ import java.util.List;
 import static android.content.Context.MODE_PRIVATE;
 
 public class SearchedWords {
-    List<Integer> arrayWordPoint;
-    List<String> arrayWordString;
+    public List<Integer> arrayWordPoint;
+    public List<String> arrayWordString;
 
     private static SearchedWords sharedValue;
 
@@ -36,7 +36,7 @@ public class SearchedWords {
         return sharedValue;
     }
 
-    void appendAndSave(String word, int point, Activity activity) {
+    public void appendAndSave(String word, int point, Activity activity) {
         if (sharedValue.arrayWordString.size() >= 10) {
             sharedValue.arrayWordString.remove(0);
             sharedValue.arrayWordPoint.remove(0);
