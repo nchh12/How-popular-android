@@ -27,6 +27,13 @@
         android:textSize="17dp"
         android:maxLength="25"
         android:padding="10dp" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/test"
+        android:text="text"
+        android:layout_below="@id/button"
+        />
     <Button
         android:id="@+id/button"
         android:layout_width="150dp"

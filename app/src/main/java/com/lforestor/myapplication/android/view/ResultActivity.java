@@ -56,7 +56,7 @@ public class ResultActivity extends Activity {
 
     void getData(String word) {
         OkHttpClient client = new OkHttpClient();
-        String url = "https://wordsapiv1.p.rapidapi.com/words/" + word;
+        String url = getString(R.string.BASE_API_URL) + word;
         Request request = new Request.Builder()
                 .url(url)
                 .get()

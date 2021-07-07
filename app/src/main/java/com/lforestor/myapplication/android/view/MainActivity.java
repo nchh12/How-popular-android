@@ -4,16 +4,26 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import androidx.core.content.res.ResourcesCompat;
 
 import com.lforestor.myapplication.android.adapter.AdapterListView;
 import com.lforestor.myapplication.android.R;
 import com.lforestor.myapplication.android.model.SearchedWords;
+import com.lforestor.myapplication.android.utils.ApiHelper;
+import com.lforestor.myapplication.android.utils.JSONParam;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import kotlin.Unit;
+import kotlin.jvm.functions.Function2;
 
 import static maes.tech.intentanim.CustomIntent.customType;
 
@@ -76,6 +86,28 @@ public class MainActivity extends Activity {
                     startActivity(intent);
                     customType(MainActivity.this, "left-to-right");
                 }
+
+
+//                JSONParam tmp = new JSONParam("test");
+//                tmp.addField("word",word);
+//
+//                ApiHelper.Companion.requestWordDetail(MainActivity.this, tmp, new Function2<JSONParam, Boolean, Unit>() {
+//                    @Override
+//                    public Unit invoke(final JSONParam data, final Boolean status) {
+//                        Log.d("@@@", status.toString() + " " + data.toString());
+//                        runOnUiThread(new Runnable() {
+//                            @Override
+//                            public void run() {
+//                                if (status) {
+//                                    ((TextView) findViewById(R.id.test)).setText(data.getFieldSafely("frequency"));
+//                                }
+//                            }
+//                        });
+//
+//                        return Unit.INSTANCE;
+//                    }
+//                });
+
             }
         });
 
