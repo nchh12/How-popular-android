@@ -10,14 +10,17 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.core.content.res.ResourcesCompat;
 
 import com.lforestor.myapplication.android.adapter.AdapterListView;
 import com.lforestor.myapplication.android.R;
 import com.lforestor.myapplication.android.model.SearchedWords;
+import com.lforestor.myapplication.android.repo.FieldEnums;
 import com.lforestor.myapplication.android.utils.ApiHelper;
 import com.lforestor.myapplication.android.utils.JSONParam;
+import com.lforestor.myapplication.android.utils.StringUtils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -33,26 +36,11 @@ public class MainActivity extends Activity {
     ListView listSearchedWords;
     AdapterListView customAdapter;
 
-    Boolean check(String s) {
-        if (s.equals("")) return false;
-        if (s.length() > 25) {
-            return false;
-        }
-        s = s.toUpperCase();
-        for (int index = 0; index < s.length(); index++) {
-            if (s.charAt(index) < 65 || 90 < s.charAt(index)) {
-                return false;
-            }
-        }
-        return true;
-    }
-
     void setUpListView() {
         int[] backgroundColors = getResources().getIntArray(R.array.backgroundColors);
         SearchedWords searchedWords = SearchedWords.getSharedValue(this);
         customAdapter = new AdapterListView(this,
                 searchedWords.arrayWordString,
-                searchedWords.arrayWordPoint,
                 backgroundColors);
         listSearchedWords.setAdapter(customAdapter);
     }
@@ -76,38 +64,16 @@ public class MainActivity extends Activity {
         bt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String word = editText.getText().toString();
-                while (word.length() != 0 && word.charAt(word.length() - 1) == ' ') {
-                    word = word.substring(0, word.length() - 1);
-                }
-                if (check(word)) {
+                String word = StringUtils.Companion.trimExtraSpace(editText.getText().toString());
+
+                if (StringUtils.Companion.checkValidWord(word)) {
                     Intent intent = new Intent(MainActivity.this, ResultActivity.class);
                     intent.putExtra("word", word);
                     startActivity(intent);
                     customType(MainActivity.this, "left-to-right");
+                } else {
+                    Toast.makeText(MainActivity.this, "Please type a single word!", Toast.LENGTH_SHORT).show();
                 }
-
-
-//                JSONParam tmp = new JSONParam("test");
-//                tmp.addField("word",word);
-//
-//                ApiHelper.Companion.requestWordDetail(MainActivity.this, tmp, new Function2<JSONParam, Boolean, Unit>() {
-//                    @Override
-//                    public Unit invoke(final JSONParam data, final Boolean status) {
-//                        Log.d("@@@", status.toString() + " " + data.toString());
-//                        runOnUiThread(new Runnable() {
-//                            @Override
-//                            public void run() {
-//                                if (status) {
-//                                    ((TextView) findViewById(R.id.test)).setText(data.getFieldSafely("frequency"));
-//                                }
-//                            }
-//                        });
-//
-//                        return Unit.INSTANCE;
-//                    }
-//                });
-
             }
         });
 

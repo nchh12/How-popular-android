@@ -7,13 +7,9 @@ import org.json.JSONObject
 class JSONParam(string: String) {
     private var intance: JSONObject? = null
 
-    constructor() : this("") {
-
-    }
-
+    constructor() : this("") {}
     init {
         try {
-
             intance = JSONObject(string)
             // string = "{a: 1}"
             // intance.get("a")   -> 1
@@ -44,5 +40,3 @@ class JSONParam(string: String) {
         return if (intance !== null) intance!!.toString() else ""
     }
 }
-
-// a = Student ~~~~ a -> null ~~~~~ a?.dangKyMonHoc()

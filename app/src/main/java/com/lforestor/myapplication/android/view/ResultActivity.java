@@ -1,18 +1,17 @@
 package com.lforestor.myapplication.android.view;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.res.ResourcesCompat;
+import androidx.lifecycle.LifecycleOwner;
 
 import android.animation.ArgbEvaluator;
 import android.animation.ValueAnimator;
-import android.app.Activity;
-import android.app.Dialog;
 import android.graphics.Point;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
-import android.view.Window;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.Button;
 import android.widget.RelativeLayout;
@@ -25,139 +24,25 @@ import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import com.lforestor.myapplication.android.R;
-import com.lforestor.myapplication.android.model.SearchedWords;
-import com.squareup.okhttp.Callback;
-import com.squareup.okhttp.OkHttpClient;
-import com.squareup.okhttp.Request;
-import com.squareup.okhttp.Response;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.IOException;
+import com.lforestor.myapplication.android.repo.FieldEnums;
+import com.lforestor.myapplication.android.repo.WordsRepo;
+import com.lforestor.myapplication.android.viewmodel.ResultViewModel;
 
 import static maes.tech.intentanim.CustomIntent.customType;
 
-public class ResultActivity extends Activity {
-    Button btBack, btCloseDialog, labelWord;
-    TextView labelResult, labelTmp, labelDetail;
+public class ResultActivity extends AppCompatActivity implements View.OnClickListener {
+    Button btBack, labelWord;
+    TextView labelResult, labelTmp;
     View slidingView, background;
     Point screenSize = new Point();
-    String word;
     int markHeight, curHeight, delta = 12, targetColor;
     int tick = 30; //ms
     int[] backgroundColors;
-    final double MAX_RATE = 7;
-    Dialog popUpView;
-    String resultString = "";
+
     RelativeLayout.LayoutParams paramOfView;
     private InterstitialAd mInterstitialAd;
 
-    void getData(String word) {
-        OkHttpClient client = new OkHttpClient();
-        String url = getString(R.string.BASE_API_URL) + word;
-        Request request = new Request.Builder()
-                .url(url)
-                .get()
-                .addHeader("x-rapidapi-host", "wordsapiv1.p.rapidapi.com")
-                .addHeader("x-rapidapi-key", getString(R.string.API_KEY))
-                .build();
-        client.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(Request request, IOException e) {
-                //error in internet connection
-                ResultActivity.this.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        errorCatching(1);
-                    }
-                });
-            }
-
-            @Override
-            public void onResponse(Response response) throws IOException {
-                if (response.isSuccessful()) {
-                    try {
-                        JSONObject json = new JSONObject(response.body().string());
-//                        Log.d("@@@", response+"");
-                        double val = json.getDouble("frequency");
-                        Log.d("@@@", val + "");
-                        val = (val > MAX_RATE) ? MAX_RATE : val;
-                        final double finalVal = val;
-                        ResultActivity.this.runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                changeUI(finalVal / MAX_RATE);
-                            }
-                        });
-                        //get pronunciation
-                        if (json.has("pronunciation") && !json.isNull("pronunciation")) {
-                            try {
-                                JSONObject pronunciationJson = json.getJSONObject("pronunciation");
-                                if (pronunciationJson.has("all") && !pronunciationJson.isNull("all")) {
-                                    resultString = "\\" + pronunciationJson.getString("all") + "\\" + "\n";
-                                }
-                            } catch (JSONException e) {
-                                resultString = "\\" + json.getString("pronunciation") + "\\" + "\n";
-                            }
-
-                        }
-                        //get detail
-                        if (!json.has("results") || json.isNull("results"))
-                            return;
-                        JSONArray detailsArray = json.getJSONArray("results");
-                        for (int index = 0; index < detailsArray.length(); index++) {
-                            JSONObject detail = detailsArray.getJSONObject(index);
-                            resultString += "_" + Integer.toString(index + 1) + "_\n";
-                            //get definition & part of speech
-                            String definition = detail.getString("definition");
-                            String partOfSpeech = detail.getString("partOfSpeech");
-                            resultString += "(" + partOfSpeech + ")\n";
-                            resultString += "- Definition: " + definition + "\n";
-                            //get synonyms
-                            if (detail.has("synonyms") && !detail.isNull("synonyms")) {
-                                JSONArray synonyms = detail.getJSONArray("synonyms");
-                                resultString += "- Synonyms:\n";
-                                for (int i = 0; i < synonyms.length(); i++) {
-                                    String oneSynonym = synonyms.getString(i);
-                                    resultString += "   = " + oneSynonym + "\n";
-                                }
-                            }
-                            //get examples
-                            if (detail.has("examples") && !detail.isNull("examples")) {
-                                JSONArray examples = detail.getJSONArray("examples");
-                                resultString += "- Ex:\n";
-                                for (int i = 0; i < examples.length(); i++) {
-                                    String oneExample = examples.getString(i);
-                                    resultString += "   _ " + oneExample + "\n";
-                                }
-                            }
-
-                            resultString += "\n\n";
-                        }
-
-                    } catch (JSONException e) {
-                        //error in casting
-                        ResultActivity.this.runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                errorCatching(2);
-                            }
-                        });
-                    }
-                } else {
-                    //not found
-                    ResultActivity.this.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            errorCatching(3);
-                        }
-                    });
-                }
-            }
-        });
-    }
+    ResultViewModel resultViewModel;
 
     Handler handler = new Handler();
     Runnable update = new Runnable() {
@@ -181,24 +66,9 @@ public class ResultActivity extends Activity {
         }
     };
 
-    void errorCatching(int caseError) {
-        switch (caseError) {
-            case 3:
-                labelTmp.setText("Not found :(");
-                break;
-            case 1:
-                labelTmp.setText("Something wrong with internet :((");
-                break;
-            default:
-                labelTmp.setText("Try later :(((");
-        }
-    }
-
     void changeUI(double percent) {
-        //add to history
-        SearchedWords searchedWords = SearchedWords.getSharedValue(this);
-        searchedWords.appendAndSave(word, (int) (percent * 100), this);
-        //
+        labelTmp.setText("");
+
         if (percent >= 0.8) {
             targetColor = backgroundColors[5];
         } else if (percent >= 0.7) {
@@ -212,7 +82,6 @@ public class ResultActivity extends Activity {
         } else {
             targetColor = backgroundColors[0];
         }
-        labelTmp.setText("");
         markHeight = (int) (screenSize.y * (1 - percent));
         curHeight = screenSize.y;
         handler.post(update);
@@ -224,7 +93,6 @@ public class ResultActivity extends Activity {
         colorAnimation.setDuration(Math.round(((double) screenSize.y * percent) * ((double) tick / delta))); // milliseconds
         colorAnimation.setInterpolator(new AccelerateDecelerateInterpolator()); // increase the speed first and
         colorAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-
             @Override
             public void onAnimationUpdate(ValueAnimator animator) {
                 background.setBackgroundColor((int) animator.getAnimatedValue());
@@ -233,24 +101,6 @@ public class ResultActivity extends Activity {
         });
         colorAnimation.start();
 
-    }
-
-    void setUpPopUpView() {
-        popUpView = new Dialog(this);
-        popUpView.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        popUpView.setCanceledOnTouchOutside(true);
-        popUpView.setContentView(R.layout.activity_pop_up);
-        btCloseDialog = popUpView.findViewById(R.id.btClose);
-        labelDetail = popUpView.findViewById(R.id.textResult);
-        Typeface typeface1 = ResourcesCompat.getFont(this, R.font.math_tapping);
-        Typeface typeface2 = ResourcesCompat.getFont(this, R.font.chalkboard);
-        btCloseDialog.setTypeface(typeface1);
-        labelDetail.setTypeface(typeface2);
-    }
-
-    void showPopUpView() {
-        labelDetail.setText(resultString);
-        popUpView.show();
     }
 
     void setUpAdmob() {
@@ -277,36 +127,63 @@ public class ResultActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_result);
-        //init UI
+
+        initUI();
+
+        resultViewModel = new ResultViewModel(this);
+
+        resultViewModel.getPageStatus().observe((LifecycleOwner) this, resultPageStatus -> {
+            Log.d("@@@", resultPageStatus.getStatus() + " " + resultPageStatus.getData().toString());
+            if (resultPageStatus.getStatus()) {
+                Double rate = Double.parseDouble(resultPageStatus.getData().getFieldSafely(FieldEnums.frequency));
+                Log.d("@@@", rate.toString());
+                changeUI(Math.min(1, rate / WordsRepo.MAX_FREQUENCY_POINT));
+            } else {
+                labelTmp.setText(resultPageStatus.getData().getFieldSafely(FieldEnums.responseDesc));
+            }
+        });
+
+    }
+
+    private void initUI() {
+        getSupportActionBar().hide();
+
         btBack = findViewById(R.id.btBack);
         labelResult = findViewById(R.id.labelResult);
         labelWord = findViewById(R.id.labelWord);
         slidingView = findViewById(R.id.slidingView);
         labelTmp = findViewById(R.id.labelTmp);
+
+        //set typo
         background = this.getWindow().getDecorView();
         Typeface typeface = ResourcesCompat.getFont(this, R.font.math_tapping);
         btBack.setTypeface(typeface);
         labelResult.setTypeface(typeface);
         labelWord.setTypeface(typeface);
         labelTmp.setTypeface(typeface);
-        setUpPopUpView();
+
         setUpAdmob();
-        //
+
         //get device's height
         getWindowManager().getDefaultDisplay().getSize(screenSize);
         paramOfView = (RelativeLayout.LayoutParams) slidingView.getLayoutParams();
         paramOfView.height = screenSize.y;
         slidingView.setLayoutParams(paramOfView);
+
         //import background color
         backgroundColors = getResources().getIntArray(R.array.backgroundColors);
         background.setBackgroundColor(backgroundColors[0]);
 
-        //get word
-        word = getIntent().getStringExtra("word");
-        labelWord.setText(word);
-        btBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        //bind click
+        btBack.setOnClickListener(this);
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.labelWord:
+                break;
+            case R.id.btBack:
                 if (mInterstitialAd.isLoaded()) {
                     Log.d("@@@", "The interstitial loaded.");
                     mInterstitialAd.show();
@@ -315,20 +192,9 @@ public class ResultActivity extends Activity {
                 }
                 finish();
                 customType(ResultActivity.this, "right-to-left");
-            }
-        });
-        getData(word);
-        btCloseDialog.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                popUpView.cancel();
-            }
-        });
-        labelWord.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showPopUpView();
-            }
-        });
+                break;
+            default:
+                return;
+        }
     }
 }

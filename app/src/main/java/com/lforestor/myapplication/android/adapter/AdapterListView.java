@@ -1,5 +1,6 @@
 package com.lforestor.myapplication.android.adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.view.LayoutInflater;
@@ -11,20 +12,21 @@ import android.widget.TextView;
 import androidx.core.content.res.ResourcesCompat;
 
 import com.lforestor.myapplication.android.R;
+import com.lforestor.myapplication.android.repo.FieldEnums;
+import com.lforestor.myapplication.android.repo.WordsRepo;
+import com.lforestor.myapplication.android.utils.JSONParam;
 
 import java.util.List;
 
 public class AdapterListView extends BaseAdapter {
     Context context;
     List<String> arrayWordString;
-    List<Integer> arrayWordPoint;
     LayoutInflater layoutInflater;
     int[] backgroundColors;
 
-    public AdapterListView(Context context, List<String> arrayWordString, List<Integer> arrayWordPoint, int[] backgroundColors) {
+    public AdapterListView(Context context, List<String> arrayWordString, int[] backgroundColors) {
         this.context = context;
         this.arrayWordString = arrayWordString;
-        this.arrayWordPoint = arrayWordPoint;
         this.layoutInflater = LayoutInflater.from(context);
         this.context = context;
         this.backgroundColors = backgroundColors;
@@ -61,6 +63,7 @@ public class AdapterListView extends BaseAdapter {
         }
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
@@ -79,10 +82,15 @@ public class AdapterListView extends BaseAdapter {
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
-        viewHolder.wordString.setText(arrayWordString.get(arrayWordString.size() - 1 - position));
-        viewHolder.wordPoint.setText(arrayWordPoint.get(arrayWordString.size() - 1 - position) + "%");
+        JSONParam data = new JSONParam(arrayWordString.get(arrayWordString.size() - 1 - position));
+        String word = data.getFieldSafely(FieldEnums.word);
+        Double rate = Double.parseDouble(data.getFieldSafely(FieldEnums.frequency));
+        int frequencyPoint = (int) (rate / WordsRepo.MAX_FREQUENCY_POINT * 100);
+
+        viewHolder.wordString.setText(word);
+        viewHolder.wordPoint.setText(frequencyPoint + "%");
         //color
-        int colorHash = getColor(arrayWordPoint.get(arrayWordString.size() - 1 - position));
+        int colorHash = getColor(frequencyPoint);
         viewHolder.wordPoint.setTextColor(colorHash);
         viewHolder.wordString.setTextColor(colorHash);
         return convertView;

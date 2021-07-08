@@ -10,8 +10,10 @@ import java.util.List;
 import static android.content.Context.MODE_PRIVATE;
 
 public class SearchedWords {
-    public List<Integer> arrayWordPoint;
     public List<String> arrayWordString;
+
+    private static final String SIZE_KEY_V1 = "SIZE_KEY_V2";
+    private static final String WORD_KEY_V1 = "WORD_KEY_V2";
 
     private static SearchedWords sharedValue;
 
@@ -23,33 +25,28 @@ public class SearchedWords {
     public static SearchedWords getSharedValue(Context context) {
         if (sharedValue == null) {
             sharedValue = new SearchedWords();
-            sharedValue.arrayWordPoint = new ArrayList<Integer>();
             sharedValue.arrayWordString = new ArrayList<String>();
             //retrieve value
             SharedPreferences sharedPreferences = context.getSharedPreferences("Storage", MODE_PRIVATE);
-            int tmpSize = sharedPreferences.getInt("SIZE_KEY", 0);
+            int tmpSize = sharedPreferences.getInt(SIZE_KEY_V1, 0);
             for (int i = 0; i < tmpSize; i++) {
-                sharedValue.arrayWordString.add(sharedPreferences.getString("WORD_KEY_" + i, ""));
-                sharedValue.arrayWordPoint.add(sharedPreferences.getInt("POINT_KEY_" + i, 0));
+                sharedValue.arrayWordString.add(sharedPreferences.getString(WORD_KEY_V1 + i, ""));
             }
         }
         return sharedValue;
     }
 
-    public void appendAndSave(String word, int point, Activity activity) {
+    public void appendAndSave(String wordDetail, Context context) {
         if (sharedValue.arrayWordString.size() >= 10) {
             sharedValue.arrayWordString.remove(0);
-            sharedValue.arrayWordPoint.remove(0);
         }
-        sharedValue.arrayWordString.add(word);
-        sharedValue.arrayWordPoint.add((point));
+        sharedValue.arrayWordString.add(wordDetail);
         //save
-        SharedPreferences sharedPreferences = activity.getSharedPreferences("Storage", MODE_PRIVATE);
+        SharedPreferences sharedPreferences = context.getSharedPreferences("Storage", MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putInt("SIZE_KEY", sharedValue.arrayWordString.size());
+        editor.putInt(SIZE_KEY_V1, sharedValue.arrayWordString.size());
         for (int i = 0; i < sharedValue.arrayWordString.size(); i++) {
-            editor.putInt("POINT_KEY_" + i, sharedValue.arrayWordPoint.get(i));
-            editor.putString("WORD_KEY_" + i, sharedValue.arrayWordString.get(i));
+            editor.putString(WORD_KEY_V1 + i, sharedValue.arrayWordString.get(i));
         }
         editor.commit();
     }
