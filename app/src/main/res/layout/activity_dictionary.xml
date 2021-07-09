@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="#2f2f2f"
+    android:paddingHorizontal="30dp"
+    android:paddingVertical="40dp"
+    tools:context=".view.DictionaryActivity">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/custom_background_dictionary"
+        android:padding="30dp">
+        <TextView
+            android:id="@+id/dictWord"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/math_tapping"
+            android:text="word"
+            android:textSize="30dp"
+            android:textColor="#0E0E0E">
+        </TextView>
+        <TextView
+            android:id="@+id/dictPhonetic"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/math_tapping"
+            android:text="/phonetic/"
+            android:textSize="10dp"
+            android:textColor="#41464D"
+            android:layout_below="@+id/dictWord"
+            android:layout_marginVertical="5dp"
+            >
+        </TextView>
+        <ListView
+            android:id="@+id/listViewMeanings"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentBottom="true"
+            android:layout_below="@+id/dictPhonetic"
+            android:layout_marginTop="20dp"
+            android:smoothScrollbar="true"
+            android:divider="#FFAC65"
+            />
+
+    </RelativeLayout>
+
+</RelativeLayout>

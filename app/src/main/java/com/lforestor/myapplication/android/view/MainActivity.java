@@ -67,8 +67,10 @@ public class MainActivity extends Activity {
                 String word = StringUtils.Companion.trimExtraSpace(editText.getText().toString());
 
                 if (StringUtils.Companion.checkValidWord(word)) {
-                    Intent intent = new Intent(MainActivity.this, ResultActivity.class);
-                    intent.putExtra("word", word);
+//                    Intent intent = new Intent(MainActivity.this, ResultActivity.class);
+//                    intent.putExtra("word", word);
+                    Intent intent = new Intent(MainActivity.this, DictionaryActivity.class);
+                    Log.d("@@@", "Here");
                     startActivity(intent);
                     customType(MainActivity.this, "left-to-right");
                 } else {

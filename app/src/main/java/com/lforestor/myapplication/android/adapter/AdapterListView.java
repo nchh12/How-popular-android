@@ -3,6 +3,7 @@ package com.lforestor.myapplication.android.adapter;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Typeface;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,7 @@ import com.lforestor.myapplication.android.repo.FieldEnums;
 import com.lforestor.myapplication.android.repo.WordsRepo;
 import com.lforestor.myapplication.android.utils.JSONParam;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class AdapterListView extends BaseAdapter {
@@ -85,10 +87,17 @@ public class AdapterListView extends BaseAdapter {
         JSONParam data = new JSONParam(arrayWordString.get(arrayWordString.size() - 1 - position));
         String word = data.getFieldSafely(FieldEnums.word);
         Double rate = Double.parseDouble(data.getFieldSafely(FieldEnums.frequency));
+        String results = data.getFieldSafely(FieldEnums.results);
+//        ArrayList<String> test = data.getFieldResultsArray(FieldEnums.synonyms, 0);
+//        String test2 = data.getFieldResults(FieldEnums.definition, 0);
+//        Log.d("@@@", results);
+//        Log.d("@@@", test.get(0));
+//        Log.d("@@@", test2);
         int frequencyPoint = (int) (rate / WordsRepo.MAX_FREQUENCY_POINT * 100);
 
         viewHolder.wordString.setText(word);
         viewHolder.wordPoint.setText(frequencyPoint + "%");
+
         //color
         int colorHash = getColor(frequencyPoint);
         viewHolder.wordPoint.setTextColor(colorHash);
