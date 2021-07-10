@@ -9,7 +9,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.core.content.res.ResourcesCompat;
@@ -67,9 +66,9 @@ public class MainActivity extends Activity {
                 String word = StringUtils.Companion.trimExtraSpace(editText.getText().toString());
 
                 if (StringUtils.Companion.checkValidWord(word)) {
-//                    Intent intent = new Intent(MainActivity.this, ResultActivity.class);
-//                    intent.putExtra("word", word);
-                    Intent intent = new Intent(MainActivity.this, DictionaryActivity.class);
+                    Intent intent = new Intent(MainActivity.this, ResultActivity.class);
+                    intent.putExtra("word", word);
+//                    Intent intent = new Intent(MainActivity.this, DictionaryActivity.class);
                     Log.d("@@@", "Here");
                     startActivity(intent);
                     customType(MainActivity.this, "left-to-right");

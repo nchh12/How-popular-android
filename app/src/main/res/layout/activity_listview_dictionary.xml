@@ -2,14 +2,14 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingBottom="20dp"
-    android:textSize="20dp">
+    android:paddingBottom="20dp">
     <TextView
         android:id="@+id/meaningNumber"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="1."
-        android:paddingVertical="5dp"></TextView>
+        android:paddingVertical="5dp"
+        android:textColor="#fff"></TextView>
     <TextView
         android:id="@+id/meaningWordType"
         android:layout_width="match_parent"
@@ -17,13 +17,15 @@
         android:text="[type]"
         android:layout_toRightOf="@id/meaningNumber"
         android:layout_marginLeft="15dp"
-        android:layout_marginRight="30dp"
+        android:layout_marginRight="20dp"
         android:paddingVertical="5dp"
-        android:background="@drawable/custom_background_meaning_divider"></TextView>
+        android:background="@drawable/custom_background_meaning_divider"
+        android:textColor="#fff"></TextView>
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="30dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="20dp"
         android:layout_below="@id/meaningNumber">
         <RelativeLayout
             android:id="@+id/meaningDefinitionLine"
@@ -35,7 +37,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="definition"
-                ></TextView>
+                android:textColor="#fff"></TextView>
         </RelativeLayout>
 
         <RelativeLayout
@@ -49,13 +51,16 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Ex:"
-            android:layout_marginRight="10dp"></TextView>
+            android:layout_marginRight="10dp"
+            android:textColor="#fff"
+            android:layout_marginTop="3dp"></TextView>
         <TextView
             android:id="@+id/meaningExample"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Example sentence"
-            android:layout_toRightOf="@id/meaningExampleLabel"></TextView>
+            android:layout_toRightOf="@id/meaningExampleLabel"
+            android:textColor="#fff"></TextView>
         </RelativeLayout>
 
         <RelativeLayout
@@ -69,13 +74,16 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Synonym:"
-                android:layout_marginRight="10dp"></TextView>
+                android:layout_marginRight="10dp"
+                android:textColor="#fff"
+                android:layout_marginTop="3dp"></TextView>
             <TextView
                 android:id="@+id/meaningSynonym"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Synonym example"
-                android:layout_toRightOf="@id/meaningSynonymLabel"></TextView>
+                android:layout_toRightOf="@id/meaningSynonymLabel"
+                android:textColor="#fff"></TextView>
         </RelativeLayout>
     </RelativeLayout>
 </RelativeLayout>

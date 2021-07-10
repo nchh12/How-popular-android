@@ -24,12 +24,12 @@ public class MeaningAdapterListView extends BaseAdapter {
     Context context;
     LayoutInflater layoutInflater;
     int[] backgroundColors;
-    String string;
+    JSONParam currentWord;
     int num;
 
-    public MeaningAdapterListView (Context context, String string, int[] backgroundColors, int num){
+    public MeaningAdapterListView (Context context, JSONParam currentWord, int[] backgroundColors, int num){
         this.context = context;
-        this.string = string;
+        this.currentWord = currentWord;
         this.layoutInflater = LayoutInflater.from(context);
         this.backgroundColors = backgroundColors;
         this.num = num;
@@ -86,6 +86,7 @@ public class MeaningAdapterListView extends BaseAdapter {
             viewHolder.lineSynonym = convertView.findViewById(R.id.meaningSynonymLine);
 
             Typeface typeface = ResourcesCompat.getFont(context, R.font.math_tapping);
+            viewHolder.wordNumber.setTypeface(typeface);
             viewHolder.wordType.setTypeface(typeface);
             viewHolder.labelExample.setTypeface(typeface);
             viewHolder.labelSynonym.setTypeface(typeface);
@@ -93,12 +94,11 @@ public class MeaningAdapterListView extends BaseAdapter {
         } else {
             viewHolder = (MeaningAdapterListView.ViewHolder) convertView.getTag();
         }
-        JSONParam data = new JSONParam(string);
-        String type = data.getFieldResults(FieldEnums.partOfSpeech, position);
-        String definition = data.getFieldResults(FieldEnums.definition, position);
-        ArrayList<String> examples = data.getFieldResultsArray(FieldEnums.examples, position);
-        ArrayList<String> synonyms = data.getFieldResultsArray(FieldEnums.synonyms, position);
-        Double rate = Double.parseDouble(data.getFieldSafely(FieldEnums.frequency));
+        String type = currentWord.getFieldResults(FieldEnums.partOfSpeech, position);
+        String definition = currentWord.getFieldResults(FieldEnums.definition, position);
+        ArrayList<String> examples = currentWord.getFieldResultsArray(FieldEnums.examples, position);
+        ArrayList<String> synonyms = currentWord.getFieldResultsArray(FieldEnums.synonyms, position);
+        Double rate = Double.parseDouble(currentWord.getFieldSafely(FieldEnums.frequency));
         int frequencyPoint = (int) (rate / WordsRepo.MAX_FREQUENCY_POINT * 100);
 //        Log.d("@@@", results);
 //        Log.d("@@@", test.get(0));

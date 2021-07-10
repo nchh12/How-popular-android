@@ -26,6 +26,7 @@ import com.google.android.gms.ads.initialization.OnInitializationCompleteListene
 import com.lforestor.myapplication.android.R;
 import com.lforestor.myapplication.android.repo.FieldEnums;
 import com.lforestor.myapplication.android.repo.WordsRepo;
+import com.lforestor.myapplication.android.utils.JSONParam;
 import com.lforestor.myapplication.android.viewmodel.ResultViewModel;
 
 import static maes.tech.intentanim.CustomIntent.customType;
@@ -43,6 +44,8 @@ public class ResultActivity extends AppCompatActivity implements View.OnClickLis
     private InterstitialAd mInterstitialAd;
 
     ResultViewModel resultViewModel;
+
+    JSONParam currentWord = new JSONParam();
 
     Handler handler = new Handler();
     Runnable update = new Runnable() {
@@ -134,6 +137,7 @@ public class ResultActivity extends AppCompatActivity implements View.OnClickLis
 
         resultViewModel.getPageStatus().observe((LifecycleOwner) this, resultPageStatus -> {
             Log.d("@@@", resultPageStatus.getStatus() + " " + resultPageStatus.getData().toString());
+            currentWord = resultPageStatus.getData();
             if (resultPageStatus.getStatus()) {
                 Double rate = Double.parseDouble(resultPageStatus.getData().getFieldSafely(FieldEnums.frequency));
                 Log.d("@@@", rate.toString());
@@ -176,12 +180,15 @@ public class ResultActivity extends AppCompatActivity implements View.OnClickLis
 
         //bind click
         btBack.setOnClickListener(this);
+        labelWord.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.labelWord:
+                BottomSheetFragment bottomSheetFragment = new BottomSheetFragment(this, currentWord);
+                bottomSheetFragment.show(getSupportFragmentManager(),"ModalBottomSheet");
                 break;
             case R.id.btBack:
                 if (mInterstitialAd.isLoaded()) {

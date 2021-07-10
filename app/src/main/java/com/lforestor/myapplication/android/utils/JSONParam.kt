@@ -59,6 +59,15 @@ class JSONParam(string: String) {
         return results?.length()
     }
 
+    fun getFieldObj(field: String): String?{
+        if (intance?.has(field) == true) {
+            var jsonObj: JSONObject? = intance?.getJSONObject(field)
+            if (jsonObj?.has("all") == true)
+                return jsonObj?.getString("all")
+        }
+        return null
+    }
+
     fun addField(field: String, value: Any) {
         if (intance === null) {
             intance = JSONObject("{}")
