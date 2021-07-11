@@ -1,14 +1,15 @@
 package com.lforestor.myapplication.android.viewmodel
 
-import android.app.Activity
 import android.widget.Button
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.MutableLiveData
 import com.lforestor.myapplication.android.R
 import com.lforestor.myapplication.android.model.ResultPageStatus
 import com.lforestor.myapplication.android.repo.WordsRepo
 import com.lforestor.myapplication.android.utils.JSONParam
+import com.lforestor.myapplication.android.view.BottomSheetFragment
 
-class ResultViewModel(val activity: Activity) {
+class ResultViewModel(val activity: AppCompatActivity) {
 
     private var pageState: MutableLiveData<ResultPageStatus>? = null
 
@@ -17,7 +18,8 @@ class ResultViewModel(val activity: Activity) {
         updateSearchingWord(searchingWord)
     }
 
-    private fun updateSearchingWord(word: String) {
+    fun updateSearchingWord(word: String) {
+        hideBottomSheet()
         activity.findViewById<Button>(R.id.labelWord).text = word
         val requestParams = JSONParam()
         requestParams.addField("word", word)
@@ -26,8 +28,13 @@ class ResultViewModel(val activity: Activity) {
 
         //getApi
         WordsRepo.requestWordDetail(activity, requestParams) { data: JSONParam, status: Boolean ->
+
             setPageStatus(data, status)
         }
+
+    }
+
+    fun hideBottomSheet(){
 
     }
 

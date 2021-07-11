@@ -24,6 +24,8 @@ import com.lforestor.myapplication.android.R;
 import com.lforestor.myapplication.android.repo.FieldEnums;
 import com.lforestor.myapplication.android.repo.WordsRepo;
 import com.lforestor.myapplication.android.utils.JSONParam;
+import com.lforestor.myapplication.android.utils.StringUtils;
+import com.lforestor.myapplication.android.viewmodel.ResultViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,13 +36,15 @@ public class MeaningAdapterListView extends BaseAdapter {
     int[] backgroundColors;
     JSONParam currentWord;
     int num;
+    ResultViewModel resultViewModel;
 
-    public MeaningAdapterListView (Context context, JSONParam currentWord, int[] backgroundColors, int num){
+    public MeaningAdapterListView(Context context, ResultViewModel resultViewModel, JSONParam currentWord, int[] backgroundColors, int num) {
         this.context = context;
         this.currentWord = currentWord;
         this.layoutInflater = LayoutInflater.from(context);
         this.backgroundColors = backgroundColors;
         this.num = num;
+        this.resultViewModel = resultViewModel;
     }
 
     @Override
@@ -102,7 +106,7 @@ public class MeaningAdapterListView extends BaseAdapter {
         viewHolder.wordDefinition.setText(definition);
 
         String exp = "";
-        for (int i = 0; !examples.isEmpty() && i < examples.size(); i++){
+        for (int i = 0; !examples.isEmpty() && i < examples.size(); i++) {
             if (i < examples.size() - 1)
                 exp += "\"" + examples.get(i) + "\"" + "\n";
             else
@@ -122,8 +126,15 @@ public class MeaningAdapterListView extends BaseAdapter {
                 syn.setSpan(new ClickableSpan() {
                     @Override
                     public void onClick(View widget) {
-                        Toast.makeText(context, synonyms.get(pos),
-                                Toast.LENGTH_SHORT).show();
+                        String word = synonyms.get(pos);
+                        if (StringUtils.Companion.checkValidWord(word)) {
+                            Toast.makeText(context, "Search for" + word,
+                                    Toast.LENGTH_SHORT).show();
+                            resultViewModel.updateSearchingWord(word);
+                        } else {
+                            Toast.makeText(context, word + " is invalid to search",
+                                    Toast.LENGTH_SHORT).show();
+                        }
                     }
                 }, syn.length() - synonyms.get(i).length(), syn.length(), 0);
                 if (i < synonyms.size() - 1)
@@ -131,8 +142,7 @@ public class MeaningAdapterListView extends BaseAdapter {
             }
             viewHolder.wordSynonym.setMovementMethod(LinkMovementMethod.getInstance());
             viewHolder.wordSynonym.setText(syn, TextView.BufferType.SPANNABLE);
-        }
-        else
+        } else
             viewHolder.lineSynonym.setVisibility(View.GONE);
 
         //color
@@ -142,7 +152,7 @@ public class MeaningAdapterListView extends BaseAdapter {
         return convertView;
     }
 
-    void mapping(ViewHolder viewHolder, View convertView){
+    void mapping(ViewHolder viewHolder, View convertView) {
         viewHolder.wordNumber = convertView.findViewById(R.id.meaningNumber);
         viewHolder.wordType = convertView.findViewById(R.id.meaningWordType);
         viewHolder.wordDefinition = convertView.findViewById(R.id.meaningDefinition);

@@ -13,11 +13,13 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.lforestor.myapplication.android.adapter.MeaningAdapterListView;
 import com.lforestor.myapplication.android.repo.FieldEnums;
 import com.lforestor.myapplication.android.utils.JSONParam;
+import com.lforestor.myapplication.android.viewmodel.ResultViewModel;
 
 public class BottomSheetFragment extends BottomSheetDialogFragment {
-    public BottomSheetFragment(Context context, JSONParam currentWord) {
+    public BottomSheetFragment(Context context, ResultViewModel resultViewModel, JSONParam currentWord) {
         this.context = context;
         this.currentWord = currentWord;
+        this.resultViewModel = resultViewModel;
     }
 
     ListView listMeanings;
@@ -26,6 +28,7 @@ public class BottomSheetFragment extends BottomSheetDialogFragment {
     MeaningAdapterListView customAdapter;
     TextView word;
     TextView pronunciation;
+    ResultViewModel resultViewModel;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -36,6 +39,7 @@ public class BottomSheetFragment extends BottomSheetDialogFragment {
         int[] backgroundColors = getResources().getIntArray(R.array.backgroundColors);
         int num = currentWord.getFieldResultsCount();
         customAdapter = new MeaningAdapterListView(this.context,
+                resultViewModel,
                 currentWord,
                 backgroundColors,
                 num);

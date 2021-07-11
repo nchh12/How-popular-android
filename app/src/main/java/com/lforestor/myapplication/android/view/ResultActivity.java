@@ -6,6 +6,7 @@ import androidx.lifecycle.LifecycleOwner;
 
 import android.animation.ArgbEvaluator;
 import android.animation.ValueAnimator;
+import android.annotation.SuppressLint;
 import android.graphics.Point;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -24,6 +25,7 @@ import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import com.lforestor.myapplication.android.R;
+import com.lforestor.myapplication.android.model.ResultPageStatus;
 import com.lforestor.myapplication.android.repo.FieldEnums;
 import com.lforestor.myapplication.android.repo.WordsRepo;
 import com.lforestor.myapplication.android.utils.JSONParam;
@@ -45,7 +47,8 @@ public class ResultActivity extends AppCompatActivity implements View.OnClickLis
 
     ResultViewModel resultViewModel;
 
-    JSONParam currentWord = new JSONParam();
+    ResultPageStatus currentPageStatus;
+    BottomSheetFragment bottomSheetFragment = null;
 
     Handler handler = new Handler();
     Runnable update = new Runnable() {
@@ -137,12 +140,13 @@ public class ResultActivity extends AppCompatActivity implements View.OnClickLis
 
         resultViewModel.getPageStatus().observe((LifecycleOwner) this, resultPageStatus -> {
             Log.d("@@@", resultPageStatus.getStatus() + " " + resultPageStatus.getData().toString());
-            currentWord = resultPageStatus.getData();
+            currentPageStatus = resultPageStatus;
             if (resultPageStatus.getStatus()) {
                 Double rate = Double.parseDouble(resultPageStatus.getData().getFieldSafely(FieldEnums.frequency));
                 Log.d("@@@", rate.toString());
                 changeUI(Math.min(1, rate / WordsRepo.MAX_FREQUENCY_POINT));
             } else {
+                resetPageUI();
                 labelTmp.setText(resultPageStatus.getData().getFieldSafely(FieldEnums.responseDesc));
             }
         });
@@ -167,7 +171,15 @@ public class ResultActivity extends AppCompatActivity implements View.OnClickLis
         labelTmp.setTypeface(typeface);
 
         setUpAdmob();
+        resetPageUI();
 
+        //bind click
+        btBack.setOnClickListener(this);
+        labelWord.setOnClickListener(this);
+    }
+
+    @SuppressLint("ResourceAsColor")
+    private void resetPageUI() {
         //get device's height
         getWindowManager().getDefaultDisplay().getSize(screenSize);
         paramOfView = (RelativeLayout.LayoutParams) slidingView.getLayoutParams();
@@ -177,18 +189,24 @@ public class ResultActivity extends AppCompatActivity implements View.OnClickLis
         //import background color
         backgroundColors = getResources().getIntArray(R.array.backgroundColors);
         background.setBackgroundColor(backgroundColors[0]);
+        labelWord.setTextColor(R.color.gray);
 
-        //bind click
-        btBack.setOnClickListener(this);
-        labelWord.setOnClickListener(this);
+        labelResult.setText("");
+
+        if (bottomSheetFragment != null) {
+            bottomSheetFragment.dismiss();
+        }
     }
 
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.labelWord:
-                BottomSheetFragment bottomSheetFragment = new BottomSheetFragment(this, currentWord);
-                bottomSheetFragment.show(getSupportFragmentManager(),"ModalBottomSheet");
+                Log.d("@@@@", currentPageStatus.getStatus() + " ");
+                if (currentPageStatus.getStatus()) {
+                    bottomSheetFragment = new BottomSheetFragment(this, resultViewModel, currentPageStatus.getData());
+                    bottomSheetFragment.show(getSupportFragmentManager(), "ModalBottomSheet");
+                }
                 break;
             case R.id.btBack:
                 if (mInterstitialAd.isLoaded()) {
