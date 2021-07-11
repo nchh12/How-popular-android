@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">How popular?</string>
+    <string name="App_ID">ca-app-pub-8228726508975919~1830224981</string>
+    <string name="Ad_unit_ID">ca-app-pub-8228726508975919/1008117032</string>
+    <string name="API_KEY">09d7da2befmshf42539be7194045p1e6538jsn55ec41f98a93</string>
+    <string name="BASE_API_URL">https://wordsapiv1.p.rapidapi.com/words/</string>
+
+    <string name="Network_error">There is something wrong with the internet</string>
+    <string name="Not_found">Not found :(</string>
+    <string name="Searching">Searching...</string>
+</resources>
