@@ -22,6 +22,7 @@
         android:background="@drawable/custom_background_meaning_divider"
         android:textColor="#fff"></TextView>
     <RelativeLayout
+        android:id="@+id/meaningEntry"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="30dp"
@@ -81,9 +82,10 @@
                 android:id="@+id/meaningSynonym"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Synonym example"
+                android:text=""
                 android:layout_toRightOf="@id/meaningSynonymLabel"
-                android:textColor="#fff"></TextView>
+                android:textColor="#fff"
+                android:textColorLink="#fff"></TextView>
         </RelativeLayout>
     </RelativeLayout>
 </RelativeLayout>
