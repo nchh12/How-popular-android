@@ -69,7 +69,6 @@ public class MainActivity extends Activity {
                     Intent intent = new Intent(MainActivity.this, ResultActivity.class);
                     intent.putExtra("word", word);
 //                    Intent intent = new Intent(MainActivity.this, DictionaryActivity.class);
-                    Log.d("@@@", "Here");
                     startActivity(intent);
                     customType(MainActivity.this, "left-to-right");
                 } else {

@@ -139,14 +139,12 @@ public class ResultActivity extends AppCompatActivity implements View.OnClickLis
         resultViewModel = new ResultViewModel(this);
 
         resultViewModel.getPageStatus().observe((LifecycleOwner) this, resultPageStatus -> {
-            Log.d("@@@", resultPageStatus.getStatus() + " " + resultPageStatus.getData().toString());
             currentPageStatus = resultPageStatus;
             if (resultPageStatus.getStatus()) {
                 Double rate = Double.parseDouble(resultPageStatus.getData().getFieldSafely(FieldEnums.frequency));
-                Log.d("@@@", rate.toString());
                 changeUI(Math.min(1, rate / WordsRepo.MAX_FREQUENCY_POINT));
             } else {
-                resetPageUI();
+//                resetPageUI();
                 labelTmp.setText(resultPageStatus.getData().getFieldSafely(FieldEnums.responseDesc));
             }
         });
