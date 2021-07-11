@@ -55,7 +55,7 @@ class JSONParam(string: String) {
 
     fun getFieldResultsCount(): Int? {
         var results: JSONArray? = intance?.getJSONArray(FieldEnums.results)
-        Log.d("@@@", results?.length().toString())
+//        Log.d("@@@", results?.length().toString())
         return results?.length()
     }
 

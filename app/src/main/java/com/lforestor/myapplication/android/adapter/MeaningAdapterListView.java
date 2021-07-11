@@ -128,7 +128,7 @@ public class MeaningAdapterListView extends BaseAdapter {
                     public void onClick(View widget) {
                         String word = synonyms.get(pos);
                         if (StringUtils.Companion.checkValidWord(word)) {
-                            Toast.makeText(context, "Search for" + word,
+                            Toast.makeText(context, "Search for " + word,
                                     Toast.LENGTH_SHORT).show();
                             resultViewModel.updateSearchingWord(word);
                         } else {

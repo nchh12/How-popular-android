@@ -68,10 +68,8 @@ public class MainActivity extends Activity {
                 if (StringUtils.Companion.checkValidWord(word)) {
                     Intent intent = new Intent(MainActivity.this, ResultActivity.class);
                     intent.putExtra("word", word);
-//                    Intent intent = new Intent(MainActivity.this, DictionaryActivity.class);
-                    Log.d("@@@", "Here");
                     startActivity(intent);
-                    customType(MainActivity.this, "left-to-right");
+//                    customType(MainActivity.this, "left-to-right");
                 } else {
                     Toast.makeText(MainActivity.this, "Please type a single word!", Toast.LENGTH_SHORT).show();
                 }

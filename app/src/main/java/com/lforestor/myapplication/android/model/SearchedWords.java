@@ -4,6 +4,9 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.lforestor.myapplication.android.repo.FieldEnums;
+import com.lforestor.myapplication.android.utils.JSONParam;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,11 +39,11 @@ public class SearchedWords {
         return sharedValue;
     }
 
-    public void appendAndSave(String wordDetail, Context context) {
+    public void appendAndSave(JSONParam wordDetail, Context context) {
         if (sharedValue.arrayWordString.size() >= 10) {
             sharedValue.arrayWordString.remove(0);
         }
-        sharedValue.arrayWordString.add(wordDetail);
+        sharedValue.arrayWordString.add(wordDetail.toString());
         //save
         SharedPreferences sharedPreferences = context.getSharedPreferences("Storage", MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -48,6 +51,7 @@ public class SearchedWords {
         for (int i = 0; i < sharedValue.arrayWordString.size(); i++) {
             editor.putString(WORD_KEY_V1 + i, sharedValue.arrayWordString.get(i));
         }
+        editor.putString("WORD_"+wordDetail.getFieldSafely(FieldEnums.word), wordDetail.toString());
         editor.commit();
     }
 

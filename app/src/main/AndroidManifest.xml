@@ -14,9 +14,6 @@
         <activity android:name="com.lforestor.myapplication.android.view.ResultActivity"
             android:configChanges="orientation"
             android:screenOrientation="userPortrait"></activity>
-        <activity android:name="com.lforestor.myapplication.android.view.DictionaryActivity"
-            android:configChanges="orientation"
-            android:screenOrientation="userPortrait"></activity>
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
             android:value="@string/App_ID" />
