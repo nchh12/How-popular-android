@@ -200,7 +200,7 @@ public class ResultActivity extends AppCompatActivity implements View.OnClickLis
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.labelWord:
-                Log.d("@@@@", currentPageStatus.getStatus() + " ");
+//                Log.d("@@@@", currentPageStatus.getStatus() + " " + currentPageStatus.getData().toString());
                 if (currentPageStatus.getStatus()) {
                     bottomSheetFragment = new BottomSheetFragment(this, resultViewModel, currentPageStatus.getData());
                     bottomSheetFragment.show(getSupportFragmentManager(), "ModalBottomSheet");

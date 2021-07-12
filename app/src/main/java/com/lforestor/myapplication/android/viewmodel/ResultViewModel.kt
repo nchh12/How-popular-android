@@ -1,5 +1,6 @@
 package com.lforestor.myapplication.android.viewmodel
 
+import android.util.Log
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.MutableLiveData
@@ -28,7 +29,6 @@ class ResultViewModel(val activity: AppCompatActivity) {
 
         //getApi
         WordsRepo.requestWordDetail(activity, requestParams) { data: JSONParam, status: Boolean ->
-
             setPageStatus(data, status)
         }
 

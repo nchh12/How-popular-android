@@ -61,7 +61,7 @@ public class BottomSheetFragment extends BottomSheetDialogFragment {
         setUpListView();
 
         String curWord = currentWord.getFieldSafely(FieldEnums.word);
-        String curWordPronunciation = currentWord.getFieldObj(FieldEnums.pronunciation);
+        String curWordPronunciation = currentWord.getPronunciation(FieldEnums.pronunciation);
         word.setText(curWord);
         if (curWordPronunciation != "")
             pronunciation.setText("\\" + curWordPronunciation + "\\");

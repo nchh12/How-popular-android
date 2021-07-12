@@ -9,14 +9,11 @@ import org.json.JSONObject
 class JSONParam(string: String) {
     private var intance: JSONObject? = null
 
+    constructor() : this("{}") {}
 
-    constructor() : this("") {}
     init {
         try {
             intance = JSONObject(string)
-            // string = "{a: 1}"
-            // intance.get("a")   -> 1
-
         } catch (e: JSONException) {
             Log.d("@@@", "Cannot to parse " + string)
         }
@@ -26,46 +23,6 @@ class JSONParam(string: String) {
         return if (intance?.has(field) == true)
             intance?.getString(field) else
             null
-    }
-
-    fun getFieldResultsArray(field: String, index: Int): ArrayList<String> {
-        var results: JSONArray? = intance?.getJSONArray(FieldEnums.results)
-//        var length: Int? = intance?.length()
-        var jsonObj: JSONObject? = results?.getJSONObject(index)
-        var FieldsNames = ArrayList<String>()
-        if (jsonObj?.has(field) == true) {
-            var ja: JSONArray? = jsonObj?.getJSONArray(field)
-            var len: Int? = ja?.length()
-
-            for (i in 0 until len!!) {
-                FieldsNames.add(ja?.getString(i)!!)
-            }
-        }
-        return FieldsNames
-    }
-
-    fun getFieldResults(field: String, index: Int): String? {
-        var results: JSONArray? = intance?.getJSONArray(FieldEnums.results)
-//        var length: Int? = intance?.length()
-        var jsonObj: JSONObject? = results?.getJSONObject(index)
-        return if (jsonObj?.has(field) == true)
-            jsonObj?.getString(field) else
-            null
-    }
-
-    fun getFieldResultsCount(): Int? {
-        var results: JSONArray? = intance?.getJSONArray(FieldEnums.results)
-//        Log.d("@@@", results?.length().toString())
-        return results?.length()
-    }
-
-    fun getFieldObj(field: String): String?{
-        if (intance?.has(field) == true) {
-            var jsonObj: JSONObject? = intance?.getJSONObject(field)
-            if (jsonObj?.has("all") == true)
-                return jsonObj?.getString("all")
-        }
-        return null
     }
 
     fun addField(field: String, value: Any) {
@@ -78,6 +35,44 @@ class JSONParam(string: String) {
     fun isEmpty(): Boolean {
         return intance === null
     }
+
+    fun getFieldResultsArray(field: String, index: Int): ArrayList<String> {
+        val results = JSONArray(getFieldSafely(FieldEnums.results) ?: "[]")
+        val jsonObj: JSONObject? = results.getJSONObject(index)
+        val fieldsNames = ArrayList<String>()
+        if (jsonObj?.has(field) == true) {
+            val ja: JSONArray? = jsonObj.getJSONArray(field)
+            val len: Int? = ja?.length()
+
+            for (i in 0 until len!!) {
+                fieldsNames.add(ja.getString(i)!!)
+            }
+        }
+        return fieldsNames
+    }
+
+    fun getFieldResults(field: String, index: Int): String? {
+        val results = JSONArray(getFieldSafely(FieldEnums.results) ?: "[]")
+        val jsonObj: JSONObject? = results.getJSONObject(index)
+        return if (jsonObj?.has(field) == true)
+            jsonObj.getString(field) else
+            null
+    }
+
+    fun getFieldResultsCount(): Int {
+        val results = JSONArray(getFieldSafely(FieldEnums.results) ?: "[]")
+        return results.length()
+    }
+
+    fun getPronunciation(field: String): String {
+        val value = getFieldSafely(field)
+        if (value === null) {
+            return ""
+        }
+        val obj = JSONParam(value)
+        return obj.getFieldSafely("all") ?: value
+    }
+
 
     override fun toString(): String {
         return if (intance !== null) intance!!.toString() else ""
