@@ -6,7 +6,7 @@ import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
 
-class JSONParam(string: String) {
+class JSONParam(string: String?) {
     private var intance: JSONObject? = null
 
     constructor() : this("{}") {}
