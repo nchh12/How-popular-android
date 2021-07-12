@@ -144,7 +144,7 @@ public class ResultActivity extends AppCompatActivity implements View.OnClickLis
                 Double rate = Double.parseDouble(resultPageStatus.getData().getFieldSafely(FieldEnums.frequency));
                 changeUI(Math.min(1, rate / WordsRepo.MAX_FREQUENCY_POINT));
             } else {
-//                resetPageUI();
+                resetPageUI();
                 labelTmp.setText(resultPageStatus.getData().getFieldSafely(FieldEnums.responseDesc));
             }
         });
